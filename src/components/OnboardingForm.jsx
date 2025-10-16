@@ -54,7 +54,7 @@ const OnboardingForm = ({ onComplete }) => {
       {/* Grid overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#00ff0008_1px,transparent_1px),linear-gradient(to_bottom,#00ff0008_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 
-      <div className="max-w-5xl w-full border border-gray-800 rounded-3xl p-8 md:p-12 bg-gray-900/80 backdrop-blur-xl shadow-2xl relative z-10 fade-in">
+      <div className="w-[95%] max-w-[1400px] border border-gray-800 rounded-3xl p-6 md:p-10 lg:p-12 xl:p-14 bg-gray-900/80 backdrop-blur-xl shadow-2xl relative z-10 fade-in">
         {/* Progress Bar */}
         <div className="mb-10">
           <div className="flex justify-between items-center mb-4">

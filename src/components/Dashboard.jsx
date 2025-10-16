@@ -64,7 +64,7 @@ const Dashboard = ({ userData }) => {
     }, 0);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-black via-gray-900 to-black p-4 md:p-8 relative overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-br from-black via-gray-900 to-black p-3 md:p-4 lg:p-6 xl:p-8 relative overflow-x-hidden">
       {/* Animated background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 float"></div>
@@ -75,7 +75,7 @@ const Dashboard = ({ userData }) => {
       {/* Grid overlay */}
       <div className="fixed inset-0 bg-[linear-gradient(to_right,#00ff0008_1px,transparent_1px),linear-gradient(to_bottom,#00ff0008_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="w-full relative z-10">
         {/* Header */}
         <header className="border border-gray-800 rounded-3xl p-6 md:p-8 mb-8 bg-gray-900/80 backdrop-blur-xl shadow-2xl fade-in">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -167,12 +167,12 @@ const Dashboard = ({ userData }) => {
         )}
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-5 fade-in">
           {filteredContent.map(item => (
             <div
               key={item.id}
-              className="border border-gray-800 rounded-2xl p-6 bg-gray-900/80 backdrop-blur-xl 
-                         hover:bg-gray-900 transition-all duration-300 card-hover shadow-xl"
+              className="border border-gray-800 rounded-2xl p-4 md:p-5 bg-gray-900/80 backdrop-blur-xl 
+                         hover:bg-gray-900 transition-all duration-300 card-hover shadow-xl h-full flex flex-col"
             >
               {/* Header */}
               <div className="flex justify-between items-start mb-4">
@@ -195,7 +195,7 @@ const Dashboard = ({ userData }) => {
               </div>
 
               {/* Metadata */}
-              <div className="space-y-2 mb-4">
+              <div className="space-y-2 mb-4 flex-grow">
                 <div className="flex items-center gap-2 text-gray-400 text-sm">
                   <span className="text-lg">📁</span>
                   <span>Type: <span className="text-gray-300">{item.type}</span></span>
