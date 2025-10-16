@@ -1,111 +1,126 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import Navbar from './components/Navbar'
-import Onboarding from './components/Onboarding'
-import ResourceList from './components/ResourceList'
-import { fileExists, readJSON } from './utils/fileSystem'
+import { useState, useEffect } from 'react';
+import LoadingScreen from './components/LoadingScreen';
+import DirectorySelector from './components/DirectorySelector';
+import OnboardingForm from './components/OnboardingForm';
+import Dashboard from './components/Dashboard';
+import './App.css';
 
 function App() {
-  const [dirHandle, setDirHandle] = useState(null)
-  const [onboardingNeeded, setOnboardingNeeded] = useState(false)
-  const [onboardingData, setOnboardingData] = useState(null)
+  const [appState, setAppState] = useState('loading'); // loading, directory, onboarding, dashboard
+  const [directoryHandle, setDirectoryHandle] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // If dirHandle is set, check if onboarding.json exists
-    const checkOnboarding = async () => {
-      if (!dirHandle) return
-      const exists = await fileExists(dirHandle, 'onboarding.json')
-      if (!exists) setOnboardingNeeded(true)
-      else {
-        const data = await readJSON(dirHandle, 'onboarding.json')
-        setOnboardingData(data)
+    // Check localStorage for existing setup
+    const checkExistingSetup = () => {
+      const storedUserData = localStorage.getItem('internetInBoxUserData');
+      const storedDirectory = localStorage.getItem('internetInBoxDirectory');
+      
+      if (storedUserData && storedDirectory) {
+        setUserData(JSON.parse(storedUserData));
+        setAppState('dashboard');
+      } else if (storedDirectory) {
+        setAppState('onboarding');
+      } else {
+        setAppState('directory');
       }
-    }
-    checkOnboarding()
-  }, [dirHandle])
+    };
 
-  const handleDirectoryPicked = (handle) => {
-    setDirHandle(handle)
-    // keep a global reference for other components or utilities that may need it
+    checkExistingSetup();
+  }, []);
+
+  const handleLoadingComplete = () => {
+    const storedUserData = localStorage.getItem('internetInBoxUserData');
+    const storedDirectory = localStorage.getItem('internetInBoxDirectory');
+    
+    if (storedUserData && storedDirectory) {
+      setUserData(JSON.parse(storedUserData));
+      setAppState('dashboard');
+    } else if (storedDirectory) {
+      setAppState('onboarding');
+    } else {
+      setAppState('directory');
+    }
+  };
+
+  const handleDirectorySelected = async (dirHandle) => {
+    if (!dirHandle) {
+      setAppState('onboarding');
+      return;
+    }
+
+    setDirectoryHandle(dirHandle);
+    
     try {
-      window.__CURRENT_DIR_HANDLE__ = handle
-    } catch {
-      // ignore in non-browser or restricted contexts
+      // Try to create a .second file to mark the directory
+      const fileHandle = await dirHandle.getFileHandle('.second', { create: true });
+      const writable = await fileHandle.createWritable();
+      await writable.write(JSON.stringify({ 
+        initialized: true, 
+        timestamp: new Date().toISOString() 
+      }));
+      await writable.close();
+      
+      // Store directory reference (name only, as handles can't be serialized)
+      localStorage.setItem('internetInBoxDirectory', dirHandle.name);
+      
+      // Check if .second file already existed (returning user)
+      const checkExistingData = localStorage.getItem('internetInBoxUserData');
+      if (checkExistingData) {
+        setUserData(JSON.parse(checkExistingData));
+        setAppState('dashboard');
+      } else {
+        setAppState('onboarding');
+      }
+    } catch (error) {
+      console.error('Error setting up directory:', error);
+      alert('Error accessing directory. Please try again.');
     }
-  }
+  };
 
-  const handleOnboardingComplete = async (answers) => {
-    setOnboardingData(answers)
-    setOnboardingNeeded(false)
-  }
+  const handleOnboardingComplete = async (formData) => {
+    setUserData(formData);
+    
+    try {
+      // Save user data to localStorage
+      localStorage.setItem('internetInBoxUserData', JSON.stringify(formData));
+      
+      // If we have directory handle, save to file system as well
+      if (directoryHandle) {
+        const userDataHandle = await directoryHandle.getFileHandle('user-profile.json', { create: true });
+        const writable = await userDataHandle.createWritable();
+        await writable.write(JSON.stringify(formData, null, 2));
+        await writable.close();
+      }
+      
+      setAppState('dashboard');
+    } catch (error) {
+      console.error('Error saving user data:', error);
+      // Still proceed to dashboard even if file saving fails
+      setAppState('dashboard');
+    }
+  };
 
   return (
-    <div className="app-root">
-      <Navbar 
-        dirHandle={dirHandle} 
-        onPick={handleDirectoryPicked}
-        onboardingData={onboardingData}
-      />
-
-      <main className="main-content">
-        {!dirHandle && (
-          <div className="welcome-section">
-            <div className="welcome-card">
-              <div className="welcome-icon">🌐</div>
-              <h2>Welcome to Internet-in-a-Box</h2>
-              <p className="welcome-text">
-                Your personal offline knowledge hub. Access essential resources, documentation, 
-                and learning materials even without an internet connection.
-              </p>
-              <div className="features">
-                <div className="feature">
-                  <span className="feature-icon">📚</span>
-                  <div>
-                    <strong>Offline Library</strong>
-                    <p>Download and access resources anytime</p>
-                  </div>
-                </div>
-                <div className="feature">
-                  <span className="feature-icon">🎯</span>
-                  <div>
-                    <strong>Personalized</strong>
-                    <p>Get suggestions based on your interests</p>
-                  </div>
-                </div>
-                <div className="feature">
-                  <span className="feature-icon">⚡</span>
-                  <div>
-                    <strong>Fast & Local</strong>
-                    <p>Everything stored on your device</p>
-                  </div>
-                </div>
-              </div>
-              <p className="muted small">Get started by selecting a directory above ↑</p>
-            </div>
-          </div>
-        )}
-
-        {dirHandle && (
-          <>
-            {/* only show resources after onboarding data is present */}
-            {onboardingData && <ResourceList dirHandle={dirHandle} onboarding={onboardingData} />}
-
-            <Onboarding
-              open={onboardingNeeded}
-              onClose={handleOnboardingComplete}
-              dirHandle={dirHandle}
-            />
-          </>
-        )}
-      </main>
-
-      <footer className="app-footer">
-        <p className="muted">
-          Demo resources only — No backend required. All files are saved to your chosen directory.
-        </p>
-      </footer>
+    <div className="App">
+      {appState === 'loading' && (
+        <LoadingScreen onLoadComplete={handleLoadingComplete} />
+      )}
+      
+      {appState === 'directory' && (
+        <DirectorySelector onDirectorySelected={handleDirectorySelected} />
+      )}
+      
+      {appState === 'onboarding' && (
+        <OnboardingForm onComplete={handleOnboardingComplete} />
+      )}
+      
+      {appState === 'dashboard' && (
+        <Dashboard userData={userData} />
+      )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
+
