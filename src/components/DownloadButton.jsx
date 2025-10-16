@@ -1,46 +1,51 @@
 import { useEffect, useState } from 'react'
-import { fileExistsInSubdir, saveFileFromUrlToSubdir } from '../utils/fileSystem'
 
-export default function DownloadButton({ resource, dirHandle }) {
+export default function DownloadButton({ resource }) {
   const [downloaded, setDownloaded] = useState(false)
   const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
-    const check = async () => {
-      if (!dirHandle) return
-      const subdir = resource.category ? `${resource.category}` : ''
-      const exists = await fileExistsInSubdir(dirHandle, subdir, resource.filename)
-      setDownloaded(exists || localStorage.getItem(`dl:${resource.id}`) === '1')
-    }
-    check()
-  }, [dirHandle, resource])
+    // Check localStorage if already downloaded
+    const isDownloaded = localStorage.getItem(`dl:${resource.id}`) === '1'
+    setDownloaded(isDownloaded)
+  }, [resource])
 
   const handleDownload = async () => {
-    if (!dirHandle) {
-      alert('Please select a directory first')
-      return
-    }
     if (downloading) return
     if (downloaded) {
-      alert('Already on your device ✓')
+      alert('Already downloaded ✓')
       return
     }
     
     try {
       setDownloading(true)
-      const subdir = resource.category ? `${resource.category}` : ''
-      await saveFileFromUrlToSubdir(dirHandle, resource.url, subdir, resource.filename)
+      
+      // Fetch the file
+      const response = await fetch(resource.url)
+      if (!response.ok) throw new Error('Network response was not ok')
+      
+      const blob = await response.blob()
+      
+      // Create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob)
+      
+      // Create a temporary anchor element and trigger download
+      const a = document.createElement('a')
+      a.href = url
+      a.download = resource.filename
+      document.body.appendChild(a)
+      a.click()
+      
+      // Cleanup
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+      
+      // Mark as downloaded
       setDownloaded(true)
       localStorage.setItem(`dl:${resource.id}`, '1')
     } catch (err) {
       console.error('Download failed', err)
-      if (err?.code === 'exists') {
-        alert('Already on your device ✓')
-        setDownloaded(true)
-        localStorage.setItem(`dl:${resource.id}`, '1')
-      } else {
-        alert('Download failed: ' + err.message)
-      }
+      alert('Download failed: ' + err.message)
     } finally {
       setDownloading(false)
     }

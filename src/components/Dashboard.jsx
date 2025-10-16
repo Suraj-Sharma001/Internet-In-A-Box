@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DownloadButton from './DownloadButton';
 import resourceData from '../utils/data';
 
-const Dashboard = ({ userData, dirHandle }) => {
+const Dashboard = ({ userData }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   
@@ -192,8 +192,7 @@ const Dashboard = ({ userData, dirHandle }) => {
                   filename: item.filename,
                   url: item.url,
                   category: item.category
-                }} 
-                dirHandle={dirHandle}
+                }}
               />
             </div>
           ))}
