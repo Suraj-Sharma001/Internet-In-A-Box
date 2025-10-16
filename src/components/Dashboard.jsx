@@ -82,7 +82,7 @@ const Dashboard = ({ userData }) => {
             <div>
               <div className="flex items-center gap-4 mb-2">
                 <div className="text-5xl float" style={{ animationDuration: '3s' }}>🌐</div>
-                <h1 className="text-4xl md:text-5xl font-black gradient-text">
+                <h1 className="text-4xl md:text-5xl font-black text-white gradient-text">
                   Internet-in-a-Box
                 </h1>
               </div>

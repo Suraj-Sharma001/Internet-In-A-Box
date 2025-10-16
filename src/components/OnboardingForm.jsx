@@ -58,7 +58,7 @@ const OnboardingForm = ({ onComplete }) => {
         {/* Progress Bar */}
         <div className="mb-10">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-lg font-bold gradient-text">Step {step} of 3</span>
+            <span className="text-lg font-bold gradient-text text-white">Step {step} of 3</span>
             <span className="text-gray-400 text-sm">{Math.round((step / 3) * 100)}% Complete</span>
           </div>
           <div className="w-full bg-gray-800 rounded-full h-3 border border-gray-700 overflow-hidden">
@@ -76,7 +76,7 @@ const OnboardingForm = ({ onComplete }) => {
           <div className="space-y-8 fade-in">
             <div className="text-center mb-8">
               <div className="text-6xl mb-4 float">👋</div>
-              <h2 className="text-4xl md:text-5xl font-black gradient-text mb-3">
+              <h2 className="text-4xl md:text-5xl font-black gradient-text mb-3 text-white">
                 Welcome!
               </h2>
               <p className="text-gray-400 text-xl">Let's Get to Know You</p>
@@ -130,7 +130,7 @@ const OnboardingForm = ({ onComplete }) => {
           <div className="space-y-8 fade-in">
             <div className="text-center mb-8">
               <div className="text-6xl mb-4 float">🎯</div>
-              <h2 className="text-4xl md:text-5xl font-black gradient-text mb-3">
+              <h2 className="text-4xl md:text-5xl font-black gradient-text mb-3 text-white">
                 Your Interests
               </h2>
               <p className="text-gray-400 text-xl">Select topics you'd like to explore (choose multiple)</p>
@@ -170,7 +170,7 @@ const OnboardingForm = ({ onComplete }) => {
           <div className="space-y-8 fade-in">
             <div className="text-center mb-8">
               <div className="text-6xl mb-4 float">🎓</div>
-              <h2 className="text-4xl md:text-5xl font-black gradient-text mb-3">
+              <h2 className="text-4xl md:text-5xl font-black gradient-text mb-3 text-white">
                 Final Step
               </h2>
               <p className="text-gray-400 text-xl">How will you use this system?</p>
@@ -195,7 +195,7 @@ const OnboardingForm = ({ onComplete }) => {
             </div>
 
             <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700 rounded-2xl p-8 backdrop-blur">
-              <h3 className="text-2xl font-bold gradient-text mb-6 flex items-center gap-2">
+              <h3 className="text-2xl font-bold gradient-text mb-6 flex items-center gap-2 text-white">
                 <span>📋</span> Your Profile Summary
               </h3>
               <div className="space-y-4 text-gray-300">

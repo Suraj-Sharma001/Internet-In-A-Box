@@ -48,7 +48,7 @@ const DirectorySelector = ({ onDirectorySelected }) => {
               <div className="absolute -inset-2 bg-gradient-to-r from-green-500 to-cyan-500 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
             </div>
           </div>
-          <h1 className="text-5xl md:text-6xl font-black gradient-text mb-4">
+          <h1 className="text-5xl md:text-6xl font-black text-white gradient-text mb-4">
             Internet-in-a-Box
           </h1>
           <p className="text-gray-400 text-xl md:text-2xl font-light">Offline Knowledge System</p>
@@ -56,8 +56,8 @@ const DirectorySelector = ({ onDirectorySelected }) => {
 
         {/* Instructions Card */}
         <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700 rounded-2xl p-8 md:p-10 mb-8 card-hover backdrop-blur">
-          <h2 className="text-3xl font-bold gradient-text mb-6 flex items-center gap-3">
-            <span className="text-4xl">🚀</span> Setup Required
+          <h2 className="text-3xl font-bold gradient-text mb-6 flex items-center gap-3 text-white">
+            <span className="text-4xl ">🚀</span> Setup Required
           </h2>
           <div className="text-gray-300 space-y-4 text-base md:text-lg">
             <p className="flex items-start gap-3">
@@ -106,7 +106,7 @@ const DirectorySelector = ({ onDirectorySelected }) => {
         {/* Selected Path Display */}
         {selectedPath && (
           <div className="mb-8 p-6 bg-gradient-to-r from-green-900/20 to-cyan-900/20 border border-green-500/30 rounded-2xl fade-in backdrop-blur">
-            <p className="text-sm mb-3 font-bold gradient-text flex items-center gap-2">
+            <p className="text-sm mb-3 font-bold gradient-text flex items-center gap-2 text-white">
               <span>✓</span> Selected Directory:
             </p>
             <p className="text-gray-200 font-mono text-sm md:text-base break-all bg-black/50 p-4 rounded-xl border border-gray-700">
