@@ -3,6 +3,7 @@ import LoadingScreen from './components/LoadingScreen';
 import DirectorySelector from './components/DirectorySelector';
 import OnboardingForm from './components/OnboardingForm';
 import Dashboard from './components/Dashboard';
+import Navbar from './components/Navbar';
 import './App.css';
 
 function App() {
@@ -106,6 +107,13 @@ function App() {
       {appState === 'loading' && (
         <LoadingScreen onLoadComplete={handleLoadingComplete} />
       )}
+      {appState !== 'loading' && (
+        <Navbar
+          dirHandle={directoryHandle}
+          onPick={handleDirectorySelected}
+          onboardingData={userData}
+        />
+      )}
       
       {appState === 'directory' && (
         <DirectorySelector onDirectorySelected={handleDirectorySelected} />
@@ -116,7 +124,7 @@ function App() {
       )}
       
       {appState === 'dashboard' && (
-        <Dashboard userData={userData} />
+        <Dashboard userData={userData} dirHandle={directoryHandle} />
       )}
     </div>
   );

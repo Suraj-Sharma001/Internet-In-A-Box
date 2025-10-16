@@ -1,35 +1,13 @@
 import { useState } from 'react';
+import DownloadButton from './DownloadButton';
+import resourceData from '../utils/data';
 
-const Dashboard = ({ userData }) => {
+const Dashboard = ({ userData, dirHandle }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   
-  // Sample content database
-  const [contentItems, setContentItems] = useState([
-    // PDFs
-    { id: 1, title: 'Python Programming Guide', category: 'pdf', type: 'Programming', size: '15 MB', downloaded: false, url: '#', icon: '🐍' },
-    { id: 2, title: 'Data Structures & Algorithms', category: 'pdf', type: 'Computer Science', size: '22 MB', downloaded: false, url: '#', icon: '📊' },
-    { id: 3, title: 'Web Development Bootcamp', category: 'pdf', type: 'Web Development', size: '35 MB', downloaded: false, url: '#', icon: '🌐' },
-    { id: 4, title: 'Machine Learning Basics', category: 'pdf', type: 'AI/ML', size: '28 MB', downloaded: false, url: '#', icon: '🤖' },
-    
-    // Wikipedia
-    { id: 5, title: 'Computer Science - Wikipedia Dump', category: 'wiki', type: 'Computer Science', size: '450 MB', downloaded: false, url: '#', icon: '💻' },
-    { id: 6, title: 'Mathematics - Wikipedia Dump', category: 'wiki', type: 'Mathematics', size: '380 MB', downloaded: false, url: '#', icon: '🔢' },
-    { id: 7, title: 'Physics - Wikipedia Dump', category: 'wiki', type: 'Physics', size: '520 MB', downloaded: false, url: '#', icon: '⚛️' },
-    
-    // Documentation
-    { id: 8, title: 'React Documentation (Complete)', category: 'docs', type: 'Web Development', size: '12 MB', downloaded: false, url: '#', icon: '⚛️' },
-    { id: 9, title: 'Python Official Documentation', category: 'docs', type: 'Programming', size: '18 MB', downloaded: false, url: '#', icon: '📖' },
-    { id: 10, title: 'Node.js Documentation', category: 'docs', type: 'Programming', size: '14 MB', downloaded: false, url: '#', icon: '📗' },
-    
-    // Educational Content
-    { id: 11, title: 'MIT OpenCourseWare - CS50', category: 'courses', type: 'Computer Science', size: '1.2 GB', downloaded: false, url: '#', icon: '🎓' },
-    { id: 12, title: 'Khan Academy - Calculus', category: 'courses', type: 'Mathematics', size: '850 MB', downloaded: false, url: '#', icon: '📐' },
-    
-    // Tools
-    { id: 13, title: 'Offline Code Editor', category: 'tools', type: 'Programming', size: '5 MB', downloaded: false, url: '#', icon: '⚡' },
-    { id: 14, title: 'Scientific Calculator', category: 'tools', type: 'Mathematics', size: '2 MB', downloaded: false, url: '#', icon: '🧮' },
-  ]);
+  // Get actual resources from data.jsx
+  const contentItems = resourceData.suggestionsFor(userData);
 
   const categories = [
     { id: 'all', name: 'All Content', icon: '🌐', gradient: 'from-green-400 to-cyan-500' },
@@ -40,13 +18,7 @@ const Dashboard = ({ userData }) => {
     { id: 'tools', name: 'Tools', icon: '🛠️', gradient: 'from-cyan-400 to-blue-500' },
   ];
 
-  const handleDownload = (id) => {
-    setContentItems(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, downloaded: !item.downloaded } : item
-      )
-    );
-  };
+  // Remove handleDownload as downloads are now handled by DownloadButton component
 
   const filteredContent = contentItems.filter(item => {
     const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
@@ -55,9 +27,12 @@ const Dashboard = ({ userData }) => {
     return matchesCategory && matchesSearch;
   });
 
-  const downloadedCount = contentItems.filter(item => item.downloaded).length;
+  // Calculate stats based on localStorage download flags
+  const downloadedCount = contentItems.filter(item => 
+    localStorage.getItem(`dl:${item.id}`) === '1'
+  ).length;
   const totalSize = contentItems
-    .filter(item => item.downloaded)
+    .filter(item => localStorage.getItem(`dl:${item.id}`) === '1')
     .reduce((acc, item) => {
       const size = parseFloat(item.size);
       return acc + (item.size.includes('GB') ? size * 1024 : size);
@@ -179,7 +154,7 @@ const Dashboard = ({ userData }) => {
                 <span className="text-xs bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 px-3 py-1 rounded-full font-bold border border-gray-700">
                   {categories.find(c => c.id === item.category)?.icon} {item.category.toUpperCase()}
                 </span>
-                {item.downloaded && (
+                {localStorage.getItem(`dl:${item.id}`) === '1' && (
                   <span className="text-xs bg-gradient-to-r from-green-500 to-cyan-500 text-white px-3 py-1 rounded-full font-bold shadow-lg">
                     ✓ Downloaded
                   </span>
@@ -188,7 +163,11 @@ const Dashboard = ({ userData }) => {
 
               {/* Icon and Title */}
               <div className="flex items-start gap-3 mb-4">
-                <div className="text-4xl flex-shrink-0">{item.icon}</div>
+                <div className="text-4xl flex-shrink-0">
+                  {item.category === 'pdf' ? '📄' : 
+                   item.category === 'wiki' ? '📚' : 
+                   item.category === 'docs' ? '📖' : '📦'}
+                </div>
                 <h3 className="text-gray-200 font-bold text-xl leading-tight line-clamp-2">
                   {item.title}
                 </h3>
@@ -206,17 +185,16 @@ const Dashboard = ({ userData }) => {
                 </div>
               </div>
 
-              {/* Action Button */}
-              <button
-                onClick={() => handleDownload(item.id)}
-                className={`w-full py-3 px-4 rounded-xl font-bold transition-all duration-300 text-base
-                  ${item.downloaded
-                    ? 'bg-gray-800 border-2 border-red-500/50 text-red-400 hover:bg-red-900/30 hover:border-red-500'
-                    : 'bg-gradient-to-r from-green-500 to-cyan-500 text-white hover:from-green-600 hover:to-cyan-600 shadow-lg hover:shadow-xl hover:scale-105 transform'
-                  }`}
-              >
-                {item.downloaded ? '🗑️ Remove' : '⬇️ Download'}
-              </button>
+              {/* Action Button - Use DownloadButton component */}
+              <DownloadButton 
+                resource={{
+                  id: item.id,
+                  filename: item.filename,
+                  url: item.url,
+                  category: item.category
+                }} 
+                dirHandle={dirHandle}
+              />
             </div>
           ))}
         </div>

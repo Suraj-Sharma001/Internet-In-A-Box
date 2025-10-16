@@ -1,0 +1,2 @@
+Demo PDF placeholder: Python Programming Guide
+This is a small text placeholder that will be served as a file for demo downloads.

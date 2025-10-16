@@ -3,6 +3,11 @@ import { createContext, useContext, useEffect, useState } from 'react'
 const ThemeContext = createContext()
 
 export const themes = {
+  system: {
+    name: 'System',
+    icon: '💻',
+    // system does not define colors; it proxies to light/dark
+  },
   light: {
     name: 'Light',
     icon: '☀️',
@@ -93,25 +98,88 @@ export const themes = {
     shadow: 'rgba(20, 83, 45, 0.2)',
     gradient: 'linear-gradient(135deg, #14532d 0%, #166534 100%)',
   },
+  midnight: {
+    name: 'Midnight',
+    icon: '🌌',
+    bg: '#0b1020',
+    bgLight: '#11162a',
+    bgCard: '#131a2e',
+    text: '#e2e8f0',
+    textLight: '#cbd5e1',
+    muted: '#94a3b8',
+    primary: '#22d3ee',
+    primaryDark: '#0891b2',
+    accent: '#818cf8',
+    success: '#34d399',
+    danger: '#f87171',
+    border: '#1f2937',
+    shadow: 'rgba(0,0,0,0.4)',
+    gradient: 'linear-gradient(135deg, #0b1020 0%, #11162a 100%)',
+  },
+  violet: {
+    name: 'Violet',
+    icon: '💜',
+    bg: '#18122b',
+    bgLight: '#1f1d3a',
+    bgCard: '#221f42',
+    text: '#f5f3ff',
+    textLight: '#e9d5ff',
+    muted: '#c4b5fd',
+    primary: '#a78bfa',
+    primaryDark: '#8b5cf6',
+    accent: '#22c55e',
+    success: '#10b981',
+    danger: '#f43f5e',
+    border: '#3730a3',
+    shadow: 'rgba(0,0,0,0.35)',
+    gradient: 'linear-gradient(135deg, #18122b 0%, #1f1d3a 100%)',
+  },
+  solar: {
+    name: 'Solarized',
+    icon: '🌞',
+    bg: '#fdf6e3',
+    bgLight: '#fffaf0',
+    bgCard: '#ffffff',
+    text: '#073642',
+    textLight: '#586e75',
+    muted: '#657b83',
+    primary: '#268bd2',
+    primaryDark: '#1e6aa8',
+    accent: '#2aa198',
+    success: '#859900',
+    danger: '#dc322f',
+    border: '#eee8d5',
+    shadow: 'rgba(7,54,66,0.1)',
+    gradient: 'linear-gradient(135deg, #fdf6e3 0%, #fffaf0 100%)',
+  },
 }
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('iot-theme')
-    return saved && themes[saved] ? saved : 'light'
+    return saved && themes[saved] ? saved : 'system'
   })
 
   useEffect(() => {
     localStorage.setItem('iot-theme', theme)
-    applyTheme(themes[theme])
+    if (theme === 'system') {
+      const mql = window.matchMedia('(prefers-color-scheme: dark)')
+      const resolved = mql.matches ? themes.dark : themes.light
+      applyTheme(resolved)
+      const handler = (e) => applyTheme(e.matches ? themes.dark : themes.light)
+      mql.addEventListener?.('change', handler)
+      return () => mql.removeEventListener?.('change', handler)
+    } else {
+      applyTheme(themes[theme])
+    }
   }, [theme])
 
   const applyTheme = (themeColors) => {
     const root = document.documentElement
-    Object.entries(themeColors).forEach(([key, value]) => {
-      if (key !== 'name' && key !== 'icon') {
-        root.style.setProperty(`--${key}`, value)
-      }
+    const keys = ['bg','bgLight','bgCard','text','textLight','muted','primary','primaryDark','accent','success','danger','border','shadow','gradient']
+    keys.forEach((key) => {
+      const value = themeColors[key]
+      if (value) root.style.setProperty(`--${key}`, value)
     })
   }
 

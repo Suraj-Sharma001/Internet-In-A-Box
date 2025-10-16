@@ -22,7 +22,7 @@ export default function Navbar({ dirHandle, onPick, onboardingData }) {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-brand">
-          <div className="logo-icon">📦</div>
+          <div className="logo-icon">🌐</div>
           <div className="brand-text">
             <h1>Internet-in-a-Box</h1>
             <p className="tagline">Offline Knowledge Hub</p>
@@ -30,8 +30,6 @@ export default function Navbar({ dirHandle, onPick, onboardingData }) {
         </div>
 
         <div className="navbar-actions">
-          <ThemeToggle />
-          
           {dirHandle ? (
             <div className="directory-info">
               <div className="dir-details">
@@ -62,6 +60,8 @@ export default function Navbar({ dirHandle, onPick, onboardingData }) {
               <span>📂</span> Choose Directory
             </button>
           )}
+
+          <ThemeToggle />
 
           {onboardingData && (
             <div className="user-badge">

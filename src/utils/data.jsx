@@ -1,44 +1,79 @@
 const demoResources = [
+  // PDFs
   {
-    id: 'r1',
-    title: 'React Quickstart (Demo)',
-    type: 'webpage',
-    size: '15 KB',
-    description: 'A tiny demo HTML guide to React features.',
-    preview: '/demo/demo1.html',
-    url: '/demo/demo1.html',
-    filename: 'react-quickstart.html',
+    id: 'pdf_python_guide',
+    category: 'pdf',
+    title: 'Python Programming Guide',
+    type: 'Programming',
+    size: '15 MB',
+    description: 'Comprehensive Python notes and references (demo).',
+    preview: '/resources/pdf/python-programming-guide.pdf',
+    url: '/resources/pdf/python-programming-guide.pdf',
+    filename: 'python-programming-guide.pdf',
   },
   {
-    id: 'r2',
-    title: 'Sample PDF: Offline Guide',
-    type: 'pdf',
-    size: '45 KB',
-    description: 'A sample PDF file to demonstrate offline downloads.',
-    preview: '/demo/sample.pdf',
-    url: '/demo/sample.pdf',
-    filename: 'offline-guide.pdf',
+    id: 'pdf_dsa',
+    category: 'pdf',
+    title: 'Data Structures & Algorithms',
+    type: 'Computer Science',
+    size: '22 MB',
+    description: 'Foundational DSA topics (demo).',
+    preview: '/resources/pdf/data-structures-and-algorithms.pdf',
+    url: '/resources/pdf/data-structures-and-algorithms.pdf',
+    filename: 'data-structures-and-algorithms.pdf',
+  },
+
+  // Docs
+  {
+    id: 'docs_react_complete',
+    category: 'docs',
+    title: 'React Documentation (Complete)',
+    type: 'Web Development',
+    size: '12 MB',
+    description: 'Offline React docs bundle (demo).',
+    preview: '/resources/docs/react-docs.zip',
+    url: '/resources/docs/react-docs.zip',
+    filename: 'react-docs.zip',
   },
   {
-    id: 'r3',
-    title: 'Earth Science Primer',
-    type: 'webpage',
-    size: '22 KB',
-    description: 'Short primer on Earth science topics (demo).',
-    preview: '/demo/demo2.html',
-    url: '/demo/demo2.html',
-    filename: 'earth-primer.html',
+    id: 'docs_python_official',
+    category: 'docs',
+    title: 'Python Official Documentation',
+    type: 'Programming',
+    size: '18 MB',
+    description: 'Offline Python docs bundle (demo).',
+    preview: '/resources/docs/python-docs.zip',
+    url: '/resources/docs/python-docs.zip',
+    filename: 'python-docs.zip',
+  },
+
+  // Wiki dumps (demo small zips)
+  {
+    id: 'wiki_cs_dump',
+    category: 'wiki',
+    title: 'Computer Science - Wikipedia Dump',
+    type: 'Computer Science',
+    size: '450 MB',
+    description: 'Sample wiki dump (demo).',
+    preview: '/resources/wiki/wiki-cs-demo.zip',
+    url: '/resources/wiki/wiki-cs-demo.zip',
+    filename: 'wiki-cs-demo.zip',
+  },
+  {
+    id: 'wiki_math_dump',
+    category: 'wiki',
+    title: 'Mathematics - Wikipedia Dump',
+    type: 'Mathematics',
+    size: '380 MB',
+    description: 'Sample wiki dump (demo).',
+    preview: '/resources/wiki/wiki-math-demo.zip',
+    url: '/resources/wiki/wiki-math-demo.zip',
+    filename: 'wiki-math-demo.zip',
   },
 ]
 
 export default {
   suggestionsFor: (onboarding) => {
-    // naive personalization: if onboarding has branch include that in title
-    if (!onboarding) return demoResources
-    const interests = (onboarding.interests || '').toLowerCase()
-    if (interests.includes('react') || (onboarding.branch || '').toLowerCase().includes('computer')) {
-      return demoResources
-    }
     return demoResources
   },
 }

@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* CSS Variables: design tokens */
+:root {
+	--radius-sm: 8px;
+	--radius-md: 14px;
+	--radius-lg: 22px;
+	--shadow-soft: 0 8px 24px rgba(0,0,0,0.18);
+	--shadow-strong: 0 12px 40px rgba(0,0,0,0.35);
+	--blur-strong: blur(18px);
+	--transition-fast: 150ms;
+	--transition: 280ms;
+}
+
+/* Global page styles */
+html, body, #root {
+	height: 100%;
+}
+
+body {
+	color: var(--text, #e5e7eb);
+	background: var(--bg, #0b0f1a);
+}
+
+/* Utilities */
+.gradient-text {
+	background: linear-gradient(90deg, #22c55e, #06b6d4);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.card-hover {
+	transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.card-hover:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-soft);
+	border-color: rgba(34,197,94,0.3);
+}
+
+.fade-in { animation: fadeIn 500ms ease-out both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+
+.float { animation: floatY 6s ease-in-out infinite; }
+@keyframes floatY { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} }
+
+.neon-button {
+	background: linear-gradient(90deg, #22c55e, #06b6d4);
+	border: 0;
+	box-shadow: 0 0 0 0 rgba(34,197,94,0.5);
+	transition: transform var(--transition), box-shadow var(--transition);
+}
+.neon-button:hover { transform: translateY(-1px) scale(1.01); box-shadow: 0 0 0 6px rgba(34,197,94,0.15), 0 12px 40px rgba(6,182,212,0.25); }
+.neon-button:active { transform: translateY(0) scale(0.99); }
+
+.shimmer {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.08) 20%, transparent 40%);
+	transform: translateX(-100%);
+	animation: shimmer 2.2s infinite;
+}
+@keyframes shimmer { 100% { transform: translateX(100%);} }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+	.fade-in, .float, .shimmer { animation: none; }
+}
+
+/* Navbar */
+.navbar {
+	position: sticky;
+	top: 0;
+	z-index: 40;
+	backdrop-filter: var(--blur-strong);
+}
+.navbar-container {
+	margin: 0 auto;
+	padding: 12px clamp(12px, 3vw, 24px);
+	max-width: 1400px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border: 1px solid var(--border, rgba(148,163,184,0.15));
+	border-radius: var(--radius-lg);
+	background: color-mix(in oklab, var(--bgLight, rgba(17,24,39,0.8)) 80%, transparent);
+	box-shadow: var(--shadow-soft);
+}
+.navbar .logo-icon { font-size: 28px; }
+.navbar .brand-text h1 { font-weight: 800; font-size: 18px; margin: 0; }
+.navbar .brand-text .tagline { color: #94a3b8; font-size: 12px; margin: 0; }
+.navbar-brand { display: flex; align-items: center; gap: 12px; }
+.navbar-actions { display: flex; align-items: center; gap: 10px; position: relative; }
+.directory-info { display: flex; align-items: center; gap: 10px; }
+.dir-details { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: var(--radius-sm); background: color-mix(in oklab, var(--bgLight, #1e293b) 20%, transparent); border: 1px solid color-mix(in oklab, var(--border, #334155) 60%, transparent); }
+.dir-icon { font-size: 18px; }
+.dir-label { color: #94a3b8; font-size: 12px; }
+.dir-name { font-size: 13px; }
+.dir-buttons { position: relative; }
+.btn-icon { background: color-mix(in oklab, var(--bgLight, #1e293b) 20%, transparent); border: 1px solid color-mix(in oklab, var(--border, #334155) 60%, transparent); padding: 6px 8px; border-radius: 8px; transition: background var(--transition); }
+.btn-icon:hover { background: color-mix(in oklab, var(--bgLight, #1e293b) 35%, transparent); }
+.dropdown { position: absolute; right: 0; top: 38px; background: color-mix(in oklab, var(--bgLight, #0b1220) 95%, transparent); border: 1px solid color-mix(in oklab, var(--border, #334155) 70%, transparent); border-radius: 12px; overflow: hidden; min-width: 180px; box-shadow: var(--shadow-strong); }
+.dropdown-item { display: block; width: 100%; text-align: left; padding: 10px 12px; color: var(--text, #e5e7eb); background: transparent; border: 0; cursor: pointer; transition: background var(--transition); }
+.dropdown-item:hover { background: color-mix(in oklab, var(--bgLight, #1e293b) 25%, transparent); }
+.dropdown-item.danger { color: var(--danger, #f87171); }
+.user-badge { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: color-mix(in oklab, var(--success, #34d399) 20%, transparent); border: 1px solid color-mix(in oklab, var(--success, #34d399) 60%, transparent); }
+.user-icon { font-size: 16px; }
+.user-name { font-weight: 700; font-size: 13px; }
+
+/* Buttons baseline */
+.btn { border: 0; border-radius: 12px; padding: 10px 14px; font-weight: 700; }
+.btn.primary { background: linear-gradient(90deg, var(--success, #22c55e), var(--accent, #06b6d4)); color: white; }
+.btn.ghost { background: transparent; border: 1px solid color-mix(in oklab, var(--border, #334155) 70%, transparent); color: var(--text, #e5e7eb); }
+
+/* Theme toggle */
+.theme-toggle-container { position: relative; }
+.theme-toggle-btn { display: flex; align-items: center; gap: 8px; background: color-mix(in oklab, var(--bgLight, #1e293b) 20%, transparent); border: 1px solid color-mix(in oklab, var(--border, #334155) 60%, transparent); color: var(--text, #e5e7eb); padding: 8px 12px; border-radius: 10px; font-weight: 700; }
+.theme-dropdown { position: absolute; right: 0; top: 44px; background: color-mix(in oklab, var(--bgLight, #0b1220) 95%, transparent); border: 1px solid color-mix(in oklab, var(--border, #334155) 70%, transparent); border-radius: 12px; overflow: hidden; min-width: 220px; box-shadow: var(--shadow-strong); }
+.theme-option { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; background: transparent; border: 0; color: var(--text, #e5e7eb); cursor: pointer; transition: background var(--transition); }
+.theme-option:hover { background: color-mix(in oklab, var(--bgLight, #1e293b) 25%, transparent); }
+.theme-option.active { background: color-mix(in oklab, var(--success, #22c55e) 25%, transparent); }
+.theme-option-icon { font-size: 16px; }
+.check-icon { color: #22c55e; font-weight: 900; }
+
+/* Resource card improvements baseline for non-tailwind components */
+.resource-card.card {
+	background: color-mix(in oklab, var(--bgLight, #1e293b) 60%, transparent);
+	border: 1px solid color-mix(in oklab, var(--border, #334155) 70%, transparent);
+	border-radius: 16px;
+	padding: 16px;
+	box-shadow: var(--shadow-soft);
+}
+.resource-card .resource-header { display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center; }
+.resource-card h3 { margin: 8px 0 6px; font-size: 18px; font-weight: 800; color: var(--text, #e5e7eb); }
+.resource-card .resource-meta { font-size: 12px; color: var(--muted, #94a3b8); padding: 4px 8px; border: 1px solid color-mix(in oklab, var(--border, #334155) 70%, transparent); border-radius: 999px; }
+.resource-card .resource-desc { color: var(--muted, #94a3b8); margin-bottom: 10px; }
+.resource-card .row { display: flex; gap: 10px; }
+
