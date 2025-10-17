@@ -8,36 +8,43 @@ const Dashboard = ({ userData, dirHandle }) => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [showChat, setShowChat] = useState(false);
   
-  // Get actual resources from data.jsx
-  const contentItems = resourceData.suggestionsFor(userData);
+  // Get resources based on current view
+  const getAllContent = () => {
+    if (searchQuery) {
+      return resourceData.searchResources(searchQuery);
+    }
+    return resourceData.getResourcesByCategory(activeCategory);
+  };
+  
+  const contentItems = getAllContent();
 
   const categories = [
     { id: 'all', name: 'All Content', icon: '🌐', gradient: 'from-green-400 to-cyan-500' },
     { id: 'pdf', name: 'PDFs', icon: '📄', gradient: 'from-blue-400 to-purple-500' },
+    { id: 'docs', name: 'Documents', icon: '📖', gradient: 'from-yellow-400 to-orange-500' },
     { id: 'wiki', name: 'Wikipedia', icon: '📚', gradient: 'from-purple-400 to-pink-500' },
-    { id: 'docs', name: 'Documentation', icon: '📖', gradient: 'from-yellow-400 to-orange-500' },
-    { id: 'courses', name: 'Courses', icon: '🎓', gradient: 'from-red-400 to-pink-500' },
-    { id: 'tools', name: 'Tools', icon: '🛠️', gradient: 'from-cyan-400 to-blue-500' },
   ];
+  
+  // Get content statistics
+  const allContent = resourceData.getAllResources();
+  const totalDocuments = allContent.length;
 
-  // Remove handleDownload as downloads are now handled by DownloadButton component
+  // Content is already filtered by getAllContent(), no need for additional filtering
+  const filteredContent = contentItems;
 
-  const filteredContent = contentItems.filter(item => {
-    const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.type.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
-  // Calculate stats based on localStorage download flags
-  const downloadedCount = contentItems.filter(item => 
+  // Calculate stats based on localStorage download flags (use all content for stats)
+  const downloadedCount = allContent.filter(item => 
     localStorage.getItem(`dl:${item.id}`) === '1'
   ).length;
-  const totalSize = contentItems
+  const totalSize = allContent
     .filter(item => localStorage.getItem(`dl:${item.id}`) === '1')
     .reduce((acc, item) => {
       const size = parseFloat(item.size);
-      return acc + (item.size.includes('GB') ? size * 1024 : size);
+      const unit = item.size.split(' ')[1]?.toLowerCase();
+      if (unit === 'gb') return acc + (size * 1024);
+      if (unit === 'mb') return acc + size;
+      if (unit === 'kb') return acc + (size / 1024);
+      return acc + size; // assume MB if no unit
     }, 0);
 
   return (
@@ -69,12 +76,15 @@ const Dashboard = ({ userData, dirHandle }) => {
             </div>
             
             <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-6 border border-gray-700 backdrop-blur">
-              <div className="text-sm text-gray-400 mb-1">Storage Stats</div>
+              <div className="text-sm text-gray-400 mb-1">Library Stats</div>
               <div className="text-3xl font-bold gradient-text mb-1">
-                {downloadedCount} / {contentItems.length}
+                {downloadedCount} / {totalDocuments}
               </div>
               <div className="text-gray-500 text-sm">
-                {totalSize >= 1024 ? `${(totalSize / 1024).toFixed(2)} GB` : `${totalSize.toFixed(0)} MB`} Used
+                {totalSize >= 1024 ? `${(totalSize / 1024).toFixed(2)} GB` : `${totalSize.toFixed(0)} MB`} Downloaded
+              </div>
+              <div className="text-xs text-gray-600 mt-1">
+                {filteredContent.length} documents shown
               </div>
             </div>
           </div>
@@ -107,23 +117,79 @@ const Dashboard = ({ userData, dirHandle }) => {
         </div>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap gap-4 mb-8 fade-in">
-          {categories.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-6 py-3 rounded-xl border-2 transition-all duration-300 font-bold text-base
-                ${activeCategory === cat.id
-                  ? `bg-gradient-to-r ${cat.gradient} text-white border-transparent shadow-lg scale-105`
-                  : 'bg-gray-900/80 text-gray-300 border-gray-800 hover:border-gray-700 backdrop-blur-xl'
-                }`}
-            >
-              <span className="text-xl mr-2">{cat.icon}</span>
-              {cat.name}
-            </button>
-          ))}
+        <div className="mb-8 fade-in">
+          <div className="flex flex-wrap gap-4 mb-4">
+            {categories.map(cat => {
+              const categoryCount = resourceData.getResourcesByCategory(cat.id).length;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`px-6 py-3 rounded-xl border-2 transition-all duration-300 font-bold text-base
+                    ${activeCategory === cat.id
+                      ? `bg-gradient-to-r ${cat.gradient} text-white border-transparent shadow-lg scale-105`
+                      : 'bg-gray-900/80 text-gray-300 border-gray-800 hover:border-gray-700 backdrop-blur-xl'
+                    }`}
+                >
+                  <span className="text-xl mr-2">{cat.icon}</span>
+                  {cat.name}
+                  <span className="ml-2 text-sm opacity-75">({categoryCount})</span>
+                </button>
+              );
+            })}
+          </div>
+          
+          {/* Document Type Quick Filters */}
+          {!searchQuery && (
+            <div className="flex flex-wrap gap-2">
+              <span className="text-gray-400 text-sm mr-2 self-center">Quick filters:</span>
+              {['Programming', 'Database', 'Web Development', 'Computer Science', 'Mathematics', 'Engineering'].map(type => {
+                const typeCount = allContent.filter(item => item.type === type).length;
+                return typeCount > 0 && (
+                  <button
+                    key={type}
+                    onClick={() => setSearchQuery(type)}
+                    className="px-3 py-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full border border-gray-600 transition-all"
+                  >
+                    {type} ({typeCount})
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
+        {/* Current View Info */}
+        {(searchQuery || activeCategory !== 'all') && (
+          <div className="mb-6 p-4 border border-gray-700 rounded-2xl bg-gray-800/50 backdrop-blur-xl fade-in">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🔍</span>
+                <div>
+                  <p className="text-white font-semibold">
+                    {searchQuery ? `Search results for "${searchQuery}"` : 
+                     `Showing ${categories.find(c => c.id === activeCategory)?.name || 'Content'}`}
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    {filteredContent.length} document{filteredContent.length !== 1 ? 's' : ''} found
+                  </p>
+                </div>
+              </div>
+              {(searchQuery || activeCategory !== 'all') && (
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setActiveCategory('all');
+                  }}
+                  className="text-gray-400 hover:text-white px-3 py-1 rounded-lg border border-gray-600 hover:border-gray-500 transition-all text-sm"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+        
         {/* Personalized Recommendations */}
         {userData?.interests && userData.interests.length > 0 && activeCategory === 'all' && !searchQuery && (
           <div className="mb-8 p-6 md:p-8 border border-gray-800 rounded-3xl bg-gradient-to-br from-green-900/10 to-cyan-900/10 backdrop-blur-xl fade-in">
@@ -135,9 +201,13 @@ const Dashboard = ({ userData, dirHandle }) => {
             </p>
             <div className="flex flex-wrap gap-2">
               {userData.interests.slice(0, 5).map((interest, idx) => (
-                <span key={idx} className="px-4 py-2 bg-gradient-to-r from-green-500 to-cyan-500 text-white rounded-lg text-sm font-bold shadow-lg">
+                <button
+                  key={idx}
+                  onClick={() => setSearchQuery(interest)}
+                  className="px-4 py-2 bg-gradient-to-r from-green-500 to-cyan-500 text-white rounded-lg text-sm font-bold shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                >
                   {interest}
-                </span>
+                </button>
               ))}
             </div>
           </div>
