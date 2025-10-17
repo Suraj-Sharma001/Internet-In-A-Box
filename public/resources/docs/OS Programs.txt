@@ -1,0 +1,607 @@
+//Fork Implementation
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+int main() {
+    pid_t pid;
+
+    // Create a child process
+    pid = fork();
+
+    if (pid < 0) {
+        // fork failed
+        perror("Fork failed");
+        return 1;
+    }
+    else if (pid == 0) {
+
+        printf("Child process: PID = %d, Parent PID = %d\n", getpid(), getppid());
+    }
+    else {
+
+ 
+        printf("Parent process: PID = %d, Child PID = %d\n", getpid(),pid);
+    }
+
+    return 0;
+}
+
+
+// sum of odd even  functional calls  using fork.
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h> // For wait() function
+// Function to calculate sum of even numbers
+int sumOfEven(int n) {
+int sum = 0;
+for (int i = 2; i <= n; i += 2) {
+sum += i;
+}
+return sum;
+}
+// Function to calculate sum of odd numbers
+int sumOfOdd(int n) {
+int sum = 0;
+for (int i = 1; i <= n; i += 2) {
+sum += i;
+}
+return sum;
+}
+int main() {
+int n;
+
+// Input for upper limit
+printf("Enter the upper limit (n): ");
+scanf("%d", &n);
+pid_t pid = fork();
+// Creating a new process using fork()
+// Check if fork() failed
+if (pid < 0) {
+printf("Fork failed!\n");
+return 1;
+}
+// Child process (computes sum of odd numbers)
+else if (pid == 0) {
+int oddSum = sumOfOdd(n);
+printf("Child Process (PID: %d) - Sum of odd numbers: %d\n",getpid(), oddSum);
+}
+// Parent process (computes sum of even numbers)
+else {
+// Wait for the child process to 
+wait(NULL);
+int evenSum = sumOfEven(n);
+printf("Parent Process (PID: %d) - Sum of even numbers: %d\n",getpid(), evenSum);
+}
+return 0;
+}
+
+//wait system call
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h> // Required for wait() system call
+int main() {// Creating a new process using fork()
+pid_t pid = fork();
+// Check if fork() failed
+if (pid < 0) {
+printf("Fork failed!\n");
+return 1;
+}
+// Child process
+else if (pid == 0) {
+printf("Child Process (PID: %d) is running...\n", getpid());
+sleep(2); // Simulating child process work by sleeping for 2 seconds
+printf("Child Process (PID: %d) has finished execution.\n", getpid());
+}
+// Parent process
+else {
+printf("Parent Process (PID: %d) is waiting for the child process to finish...\n", getpid());
+int a=wait(NULL); // Parent process waits for the child process to finish
+printf("Child  process after wait returing process id %d\n",a);
+printf("Parent Process (PID: %d) resumes after the child process has finished.\n", getpid());
+}
+return 0;
+}
+
+// wait system call using status
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    int status;
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        perror("fork failed");
+        return 1;
+    }
+
+    if (pid == 0) {
+        // Child process
+        printf("Child: PID = %d, Parent PID = %d\n", getpid(), getppid());
+        exit(25);  // Exit with status 5
+    } else {
+        // Parent process
+        printf("Parent: PID = %d, Child PID = %d\n", getpid(), pid);
+        wait(&status);
+        printf("I am after wait hi");
+        
+
+        if (WIFEXITED(status)) {
+            int exit_code = WEXITSTATUS(status);
+            printf("Child exited with code: %d\n", exit_code);
+            return exit_code;  // This will be captured by `echo $?` in shell
+        } else {
+            printf("Child did not exit normally.\n");
+            return 1;
+        }
+    }
+}
+
+
+
+
+// orphan  program
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        perror("fork failed");
+        exit(1);
+    }
+    else if (pid == 0) {
+        // Child process
+        printf("Child: PID = %d, parent PID = %d\n", getpid(), getppid());
+        sleep(3);  // Child sleeps to stay alive after parent exits
+        printf("Child after sleep: PID = %d, parent PID = %d\n", getpid(), getppid());
+        
+    }
+    else {
+        // Parent process
+        printf("Parent: PID = %d, exiting immediately\n", getpid());
+        exit(0);  // Parent exits immediately, orphaning child
+    }
+
+    return 0;
+}
+
+
+//zombie
+
+
+// zombie.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        perror("fork");
+        return 1;
+    }
+
+    if (pid == 0) {
+        // Child process: exits immediately
+        printf("Child: PID = %d\n", getpid());
+        exit(0);
+    } else {
+        // Parent process: does NOT call wait()
+        printf("Parent: PID = %d, sleeping to keep zombie child...\n", getpid());
+        sleep(30);  // Sleep so you can observe the zombie
+        printf("Parent exiting.\n");
+    }
+
+    return 0;
+}
+'
+
+//pipe program
+
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/wait.h>
+
+int main() {
+    int pipefd[2];
+    pid_t pid;
+    char *messages[] = {
+        "Message 1 from parent",
+        "Message 2 from parent",
+        "Message 3 from parent"
+    };
+    int num_messages = sizeof(messages) / sizeof(messages[0]);
+
+    if (pipe(pipefd) == -1) {
+        perror("pipe");
+        return 1;
+    }
+
+    pid = fork();
+
+    if (pid < 0) {
+        perror("fork");
+        return 1;
+    }
+
+    if (pid > 0) {
+        // Parent Process
+        close(pipefd[0]); // Close unused read end
+
+        for (int i = 0; i < num_messages; i++) {
+            write(pipefd[1], messages[i], strlen(messages[i]) + 1); // +1 to include null terminator
+            sleep(1); // Simulate delay between messages
+        }
+
+        close(pipefd[1]); // Done writing
+        wait(NULL);       // Wait for child to finish
+    } else {
+        // Child Process
+        close(pipefd[1]); // Close unused write end
+
+        char buffer[100];
+        while (read(pipefd[0], buffer, sizeof(buffer)) > 0) {
+            printf("Child received: %s\n", buffer);
+        }
+
+        close(pipefd[0]);
+    }
+
+    return 0;
+}
+
+
+
+//fifo Implementaion(named pipes  ,reader writer program )
+
+reader.c
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+
+int main() {
+    const char *fifo = "/home/ubuntu/Desktop/fifo/my";
+
+    // Create FIFO if it doesn't exist (ignore errors)
+    mkfifo(fifo, 0666);
+
+    char buf[100];
+    int fd = open(fifo, O_RDONLY);
+    if (fd == -1) {
+        perror("open reader");
+        return 1;
+    }
+
+    int n = read(fd, buf, sizeof(buf) - 1);
+    printf("%d",n);
+    if (n > 0) {
+        buf[n] = '\0';
+        printf("Reader got: %s\n", buf);
+    }
+    close(fd);
+
+    return 0;
+}
+// writer.c
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string.h>
+
+int main() {
+    const char *fifo = "/home/ubuntu/Desktop/fifo/my";
+
+    // Create FIFO if it doesn't exist
+    mkfifo(fifo, 0666);
+
+    // Message to send
+    const char *message = "Hello from writer process!";
+
+    // Open FIFO for writing
+    int fd = open(fifo, O_WRONLY);
+    if (fd == -1) {
+        perror("open writer");
+        return 1;
+    }
+
+    // Write message to FIFO
+    write(fd, message, strlen(message));
+
+    // Close FIFO
+    close(fd);
+
+    return 0;
+}
+
+//Queue implementation ( receiver.c sender.c)
+
+
+
+// receiver.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+#define MAX_TEXT 512
+#define QUEUE_KEY 1234
+
+// Message structure
+struct msg_buffer {
+    long msg_type;
+    char msg_text[MAX_TEXT];
+};
+
+int main() {
+    int msgid;
+
+    // Create or get the message queue
+    msgid = msgget(QUEUE_KEY, IPC_CREAT | 0666);
+    if (msgid == -1) {
+        perror("msgget");
+        exit(EXIT_FAILURE);
+    }
+
+    struct msg_buffer message;
+
+    printf("Waiting for a message...\n");
+
+    // Receive message of type 1
+    if (msgrcv(msgid, &message, sizeof(message.msg_text), 1, 0) == -1) {
+        perror("msgrcv");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Received message: %s\n", message.msg_text);
+
+    // Delete the queue after receiving the message
+    if (msgctl(msgid, IPC_RMID, NULL) == -1) {
+        perror("msgctl (IPC_RMID)");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Message queue deleted.\n");
+    return 0;
+}
+
+// sender.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+#define MAX_TEXT 512
+#define QUEUE_KEY 1234
+
+// Define the message buffer structure (same as receiver)
+struct msg_buffer {
+    long msg_type;
+    char msg_text[MAX_TEXT];
+};
+
+int main() {
+    int msgid;
+
+    // Get the message queue (must exist)
+    msgid = msgget(QUEUE_KEY, 0666);
+    if (msgid == -1) {
+        perror("msgget");
+        exit(EXIT_FAILURE);
+    }
+
+    struct msg_buffer message;
+    message.msg_type = 1;  // Required by System V
+
+    printf("Enter message to send: ");
+    if (fgets(message.msg_text, MAX_TEXT, stdin) == NULL) {
+        perror("fgets");
+        exit(EXIT_FAILURE);
+    }
+
+    // Send the message (excluding msg_type size)
+    if (msgsnd(msgid, &message, strlen(message.msg_text) + 1, 0) == -1) {
+        perror("msgsnd");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Message sent: %s\n", message.msg_text);
+    return 0;
+}
+
+//  Semaphore inconsitency data writing and reading inconsistency
+
+writer.c
+
+#include <stdio.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <unistd.h>
+#include <string.h>
+
+typedef struct {
+    char data[100];
+} shared_mem;
+
+int main() {
+    key_t key = ftok("/home/ubuntu/Desktop/semaphore", 65); 
+    printf("The value of  key is %d\n",key);
+    int shmid = shmget(key, sizeof(shared_mem), 0666 | IPC_CREAT);
+    printf("The value of  shmid is %d\n",shmid);
+    
+
+    shared_mem *shm_ptr = (shared_mem*) shmat(shmid, NULL, 0);
+    printf("The value of shared memory pointer is %p\n", (void*)shm_ptr);
+     
+
+    // Keep writing messages continuously
+    for (int i = 1; i <= 200; i++) {
+        sprintf(shm_ptr->data, "Message-%d", i);
+        printf("[Writer] Wrote: %s\n", shm_ptr->data);
+        usleep(100000); // small delay (0.1 sec) so reader can interfere
+    }
+
+    shmdt(shm_ptr);
+    return 0;
+}
+
+Reader.c
+
+#include <stdio.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <unistd.h>
+
+typedef struct {
+    char data[100];
+} shared_mem;
+
+int main() {
+    key_t key = ftok("/home/ubuntu/Desktop/semaphore", 65);   
+    printf("The value of  key is %d\n",key);
+    int shmid = shmget(key, sizeof(shared_mem), 0666);
+    printf("The value of  shmid is %d\n",shmid);
+   shared_mem *shm_ptr = (shared_mem*) shmat(shmid, NULL, 0);
+   printf("The value of shared memory pointer is %p\n", (void*)shm_ptr);
+    
+
+
+    // Keep reading messages continuously
+    for (int i = 1; i <= 200; i++) {
+        printf("[Reader] Read : %s\n", shm_ptr->data);
+        usleep(150000); // 0.15delay so we catch writer mid-update sometimes
+    }
+
+    shmdt(shm_ptr);
+    shmctl(shmid, IPC_RMID, NULL); // remove shared memory
+    return 0;
+}
+
+
+
+//shared memory with  semaphores 
+
+
+writer.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/sem.h>
+#include <string.h>
+#include <unistd.h>
+
+#define SHM_KEY 0x1234
+#define SEM_KEY 0x5678
+
+typedef struct {
+    int number;
+} shared_mem;
+
+void sem_wait(int semid, int sem_num) {
+    struct sembuf sb = {sem_num, -1, 0};
+    semop(semid, &sb, 1);
+}
+
+void sem_signal(int semid, int sem_num) {
+    struct sembuf sb = {sem_num, 1, 0};
+    semop(semid, &sb, 1);
+}
+
+int main() {
+    int shmid = shmget(SHM_KEY, sizeof(shared_mem), 0666 | IPC_CREAT);
+    shared_mem *shm_ptr = (shared_mem *)shmat(shmid, NULL, 0);
+
+    int semid = semget(SEM_KEY, 2, 0666 | IPC_CREAT);
+
+    // Initialize semaphores (only writer should do this once)
+    semctl(semid, 0, SETVAL, 1); // writer lock
+    semctl(semid, 1, SETVAL, 0); // reader lock
+
+    for (int i = 1; i <= 10; i++) {
+        sem_wait(semid, 0);   // wait for writer lock
+
+        shm_ptr->number = i;
+        printf("Writer wrote: %d\n", i);
+        fflush(stdout);
+
+        sem_signal(semid, 1); // signal reader
+
+        sleep(1); // slow down for demo
+    }
+
+    shmdt(shm_ptr);
+    return 0;
+}
+
+
+reader.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/sem.h>
+
+#define SHM_KEY 0x1234
+#define SEM_KEY 0x5678
+
+typedef struct {
+    int value;
+} shared_mem;
+
+void sem_wait(int semid, int sem_num) {
+    struct sembuf sb = {sem_num, -1, 0};
+    if (semop(semid, &sb, 1) == -1) {
+        perror("semop wait failed");
+        exit(1);
+    }
+}
+
+void sem_signal(int semid, int sem_num) {
+    struct sembuf sb = {sem_num, 1, 0};
+    if (semop(semid, &sb, 1) == -1) {
+        perror("semop signal failed");
+        exit(1);
+    }
+}
+
+int main() {
+    int shmid = shmget(SHM_KEY, sizeof(shared_mem), 0666 | IPC_CREAT);
+    if (shmid == -1) { perror("shmget"); exit(1); }
+
+    shared_mem *shm_ptr = (shared_mem *)shmat(shmid, NULL, 0);
+    if (shm_ptr == (void *)-1) { perror("shmat"); exit(1); }
+
+    int semid = semget(SEM_KEY, 2, 0666 | IPC_CREAT);
+    if (semid == -1) { perror("semget"); exit(1); }
+
+    for (int i = 1; i <= 10; i++) {
+        sem_wait(semid, 1);   // wait for reader turn
+
+        printf("Reader received: %d\n", shm_ptr->value);
+
+        sem_signal(semid, 0); // give turn back to writer
+    }
+
+    shmdt(shm_ptr);
+    return 0;
+}
+
