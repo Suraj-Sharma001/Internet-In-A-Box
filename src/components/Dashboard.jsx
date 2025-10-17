@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import DownloadButton from './DownloadButton';
+import ChatInterface from './ChatInterface';
 import resourceData from '../utils/data';
 
-const Dashboard = ({ userData }) => {
+const Dashboard = ({ userData, dirHandle }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
+  const [showChat, setShowChat] = useState(false);
   
   // Get actual resources from data.jsx
   const contentItems = resourceData.suggestionsFor(userData);
@@ -217,6 +219,25 @@ const Dashboard = ({ userData }) => {
           </p>
         </footer>
       </div>
+
+      {/* Floating Chat Button */}
+      <button
+        onClick={() => setShowChat(true)}
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-green-500 to-cyan-500 
+                   text-white rounded-full shadow-2xl hover:shadow-green-500/50 
+                   hover:scale-110 transition-all duration-300 z-40 
+                   flex items-center justify-center text-2xl font-bold
+                   border-2 border-white/20 backdrop-blur-sm"
+        title="Chat with AI Assistant"
+      >
+        🤖
+      </button>
+
+      {/* Chat Interface Modal */}
+      <ChatInterface 
+        isOpen={showChat} 
+        onClose={() => setShowChat(false)} 
+      />
     </div>
   );
 };

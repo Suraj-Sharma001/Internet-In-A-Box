@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 
+// Resolve API base: prefer env VITE_API_BASE_URL, fallback to dev proxy '/api'
+const API_BASE = import.meta?.env?.VITE_API_BASE_URL?.replace(/\/$/, '') || '/api';
+
 const ChatBot = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
     {
@@ -21,36 +24,32 @@ const ChatBot = ({ isOpen, onClose }) => {
     scrollToBottom();
   }, [messages]);
 
-  // ML Model Integration - Placeholder for future API
+  // ML Model Integration - Call FastAPI endpoint similar to Streamlit example
   const getAIResponse = async (userMessage) => {
-    // TODO: Replace with actual ML model API call
-    // For now, using intelligent fallback responses
-    
-    const lowerMessage = userMessage.toLowerCase();
-    
-    // Knowledge-based responses
-    if (lowerMessage.includes('recommend') || lowerMessage.includes('suggest')) {
-      return "Based on your interests, I recommend checking out our Documentation and Courses sections. They have great resources for learning!";
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000); // 15s timeout
+      const resp = await fetch(`${API_BASE}/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: userMessage }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+      if (!resp.ok) {
+        const text = await resp.text().catch(() => '');
+        throw new Error(`HTTP ${resp.status}${text ? `: ${text}` : ''}`);
+      }
+      const data = await resp.json();
+      return data?.output ?? 'Sorry, I could not generate a response.';
+    } catch (e) {
+      if (e.name === 'AbortError') {
+        return 'The request timed out. The local model may be busy. Please try again.';
+      }
+      return `Failed to reach AI service at ${API_BASE}. ${e.message || e}`;
     }
-    
-    if (lowerMessage.includes('download') || lowerMessage.includes('how to')) {
-      return "To download content, simply click on any resource card in the dashboard and hit the 'Download' button. Files will be saved to your browser's default download location.";
-    }
-    
-    if (lowerMessage.includes('search') || lowerMessage.includes('find')) {
-      return "You can use the search bar at the top of the dashboard to find specific content. You can also filter by categories like PDFs, Wikipedia, Documentation, Courses, and Tools.";
-    }
-    
-    if (lowerMessage.includes('offline') || lowerMessage.includes('internet')) {
-      return "Internet-in-a-Box is designed to work completely offline! Once you download resources, you can access them anytime without an internet connection.";
-    }
-    
-    if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
-      return "I'm here to help! You can ask me about:\n• Finding and downloading content\n• Using search and filters\n• Getting personalized recommendations\n• Understanding offline features\n\nWhat would you like to know?";
-    }
-    
-    // Default intelligent response
-    return "That's an interesting question! While I'm still learning, I can help you navigate the platform, find resources, and understand how to use Internet-in-a-Box effectively. Could you rephrase your question or ask about specific features?";
   };
 
   const handleSendMessage = async () => {
