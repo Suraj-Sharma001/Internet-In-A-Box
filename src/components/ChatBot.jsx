@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-
-// Resolve API base: prefer env VITE_API_BASE_URL, fallback to dev proxy '/api'
-const API_BASE = import.meta?.env?.VITE_API_BASE_URL?.replace(/\/$/, '') || '/api';
+import { getApiBase } from '../utils/apiBase';
 
 const ChatBot = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
@@ -27,6 +25,7 @@ const ChatBot = ({ isOpen, onClose }) => {
   // ML Model Integration - Call FastAPI endpoint similar to Streamlit example
   const getAIResponse = async (userMessage) => {
     try {
+      const API_BASE = await getApiBase();
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000); // 15s timeout
       const resp = await fetch(`${API_BASE}/generate`, {

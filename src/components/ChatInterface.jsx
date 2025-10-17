@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-
-// Resolve API base: prefer env VITE_API_BASE_URL, fallback to dev proxy '/api'
-const API_BASE = import.meta?.env?.VITE_API_BASE_URL?.replace(/\/$/, '') || '/api';
+import { getApiBase } from '../utils/apiBase';
 
 const ChatInterface = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
@@ -22,6 +20,7 @@ const ChatInterface = ({ isOpen, onClose }) => {
   useEffect(() => {
     const checkServerStatus = async () => {
       try {
+        const API_BASE = await getApiBase();
         // Try FastAPI OpenAPI route first; fallback to root
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 4000);
@@ -75,7 +74,8 @@ const ChatInterface = ({ isOpen, onClose }) => {
 
     try {
       // Hit the FastAPI server exactly like the Streamlit example
-      const controller = new AbortController();
+  const API_BASE = await getApiBase();
+  const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000);
       const response = await fetch(`${API_BASE}/generate`, {
         method: 'POST',
