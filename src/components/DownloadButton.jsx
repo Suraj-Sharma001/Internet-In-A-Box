@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export default function DownloadButton({ resource }) {
+export default function DownloadButton({ resource, onPreview }) {
   const [downloaded, setDownloaded] = useState(false)
   const [downloading, setDownloading] = useState(false)
 
@@ -14,6 +14,16 @@ export default function DownloadButton({ resource }) {
     if (downloading) return
     if (downloaded) {
       alert('Already downloaded ✓')
+      return
+    }
+    // If resource is HTML and an onPreview callback is provided, open preview instead of downloading
+    const isHtml = resource.filename && resource.filename.toLowerCase().endsWith('.html')
+    if (isHtml) {
+      if (typeof onPreview === 'function') {
+        onPreview()
+      } else if (resource.url) {
+        window.open(resource.url, '_blank')
+      }
       return
     }
     

@@ -2,8 +2,15 @@
 const getFileCategory = (filename) => {
   const ext = filename.split('.').pop().toLowerCase();
   if (['pdf'].includes(ext)) return 'pdf';
-  if (['doc', 'docx', 'txt', 'zip', 'pptx'].includes(ext)) return 'docs';
-  if (filename.includes('wiki')) return 'wiki';
+  if (['doc', 'docx', 'txt', 'zip', 'pptx', 'html', 'htm'].includes(ext)) {
+    // If it's an HTML file under wiki, consider it wiki; otherwise docs
+    if (ext === 'html' || ext === 'htm') {
+      if (filename.toLowerCase().includes('wikipedia') || filename.toLowerCase().includes('wiki')) {
+        return 'wiki';
+      }
+    }
+    return filename.toLowerCase().includes('wiki') ? 'wiki' : 'docs';
+  }
   return 'docs';
 };
 
@@ -35,6 +42,7 @@ const estimateFileSize = (filename) => {
   if (['doc', 'docx'].includes(ext)) return Math.floor(Math.random() * 5 + 1) + ' MB';
   if (ext === 'txt') return Math.floor(Math.random() * 500 + 50) + ' KB';
   if (ext === 'pptx') return Math.floor(Math.random() * 10 + 3) + ' MB';
+  if (ext === 'html' || ext === 'htm') return Math.floor(Math.random() * 800 + 100) + ' KB';
   return '1 MB';
 };
 
@@ -110,13 +118,16 @@ const actualResources = [
   // Wiki files
   'wiki-cs-demo.zip',
   'wiki-math-demo.zip',
+  'Engineering - Wikipedia.html',
+  'Wikipedia, the free encyclopedia.html',
 ];
 
 const generateResourceData = () => {
   return actualResources.map((filename, index) => {
     const category = getFileCategory(filename);
-    const categoryPath = category === 'wiki' ? 'wiki' : 
-                        filename.endsWith('.pdf') ? 'pdf' : 'docs';
+  const lower = filename.toLowerCase();
+  const categoryPath = category === 'wiki' ? 'wiki' : 
+            lower.endsWith('.pdf') ? 'pdf' : 'docs';
     
     return {
       id: `${category}_${index}_${filename.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`,
@@ -125,8 +136,8 @@ const generateResourceData = () => {
       type: getFileType(filename),
       size: estimateFileSize(filename),
       description: `${generateTitle(filename)} - Available for offline access.`,
-      preview: `/resources/${categoryPath}/${filename}`,
-      url: `/resources/${categoryPath}/${filename}`,
+      preview: `/resources/${categoryPath}/${encodeURIComponent(filename)}`,
+      url: `/resources/${categoryPath}/${encodeURIComponent(filename)}`,
       filename: filename,
     };
   });

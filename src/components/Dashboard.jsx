@@ -2,11 +2,31 @@ import { useState } from 'react';
 import DownloadButton from './DownloadButton';
 import ChatInterface from './ChatInterface';
 import resourceData from '../utils/data';
+import HtmlPreviewModal from './HtmlPreviewModal';
 
 const Dashboard = ({ userData, dirHandle }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [showChat, setShowChat] = useState(false);
+  const [preview, setPreview] = useState(null); // { url, title }
+
+  const handleHtmlPreview = async (url, title) => {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 4000);
+      const resp = await fetch(url, { method: 'HEAD', signal: controller.signal });
+      clearTimeout(timeout);
+      if (!resp.ok) {
+        // If server can't serve it, open in a new tab
+        window.open(url, '_blank');
+        return;
+      }
+      setPreview({ url, title });
+    } catch (e) {
+      // Network or CORS issue — open in a new tab as a fallback
+      window.open(url, '_blank');
+    }
+  };
   
   // Get resources based on current view
   const getAllContent = () => {
@@ -257,15 +277,24 @@ const Dashboard = ({ userData, dirHandle }) => {
                 </div>
               </div>
 
-              {/* Action Button - Use DownloadButton component */}
-              <DownloadButton 
-                resource={{
-                  id: item.id,
-                  filename: item.filename,
-                  url: item.url,
-                  category: item.category
-                }}
-              />
+              {/* Actions: Preview for HTML, Download for others */}
+              {item.filename?.toLowerCase().endsWith('.html') || item.filename?.toLowerCase().endsWith('.htm') ? (
+                <button
+                  className="w-full py-3 px-4 rounded-xl font-bold transition-all duration-300 text-base bg-gray-800 border-2 border-gray-700 text-gray-300 hover:bg-gray-700"
+                  onClick={() => handleHtmlPreview(item.preview || item.url, item.title)}
+                >
+                  👁️ Preview
+                </button>
+              ) : (
+                <DownloadButton 
+                  resource={{
+                    id: item.id,
+                    filename: item.filename,
+                    url: item.url,
+                    category: item.category
+                  }}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -308,6 +337,15 @@ const Dashboard = ({ userData, dirHandle }) => {
         isOpen={showChat} 
         onClose={() => setShowChat(false)} 
       />
+
+      {/* HTML Preview Modal */}
+      {preview && (
+        <HtmlPreviewModal
+          url={preview.url}
+          title={preview.title}
+          onClose={() => setPreview(null)}
+        />
+      )}
     </div>
   );
 };
