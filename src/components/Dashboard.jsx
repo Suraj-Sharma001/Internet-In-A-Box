@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DownloadButton from './DownloadButton';
 import ChatInterface from './ChatInterface';
 import resourceData from '../utils/data';
@@ -28,15 +28,42 @@ const Dashboard = ({ userData, dirHandle }) => {
     }
   };
   
-  // Get resources based on current view
-  const getAllContent = () => {
-    if (searchQuery) {
-      return resourceData.searchResources(searchQuery);
+  const [allResources, setAllResources] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  const loadResources = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const list = await resourceData.getAllResources()
+      setAllResources(list)
+    } catch (e) {
+      setError(e?.message || 'Failed to load resources')
+    } finally {
+      setLoading(false)
     }
-    return resourceData.getResourcesByCategory(activeCategory);
-  };
-  
-  const contentItems = getAllContent();
+  }
+
+  useEffect(() => {
+    loadResources()
+    const interval = setInterval(() => {
+      // Poll every 10s to pick up new files written to manifest by Vite dev plugin
+      loadResources()
+    }, 10000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const contentItems = useMemo(() => {
+    if (searchQuery) return allResources.filter(r =>
+      r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      r.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      r.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      r.filename.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    if (activeCategory === 'all') return allResources
+    return allResources.filter(r => r.category === activeCategory)
+  }, [allResources, searchQuery, activeCategory])
 
   const categories = [
     { id: 'all', name: 'All Content', icon: '🌐', gradient: 'from-green-400 to-cyan-500' },
@@ -46,8 +73,8 @@ const Dashboard = ({ userData, dirHandle }) => {
   ];
   
   // Get content statistics
-  const allContent = resourceData.getAllResources();
-  const totalDocuments = allContent.length;
+  const allContent = allResources
+  const totalDocuments = allContent.length
 
   // Content is already filtered by getAllContent(), no need for additional filtering
   const filteredContent = contentItems;
@@ -133,6 +160,13 @@ const Dashboard = ({ userData, dirHandle }) => {
                 ✕
               </button>
             )}
+            <button
+              onClick={loadResources}
+              className="absolute right-16 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 text-2xl"
+              title="Refresh resources"
+            >
+              ⟳
+            </button>
           </div>
         </div>
 
@@ -140,7 +174,7 @@ const Dashboard = ({ userData, dirHandle }) => {
         <div className="mb-8 fade-in">
           <div className="flex flex-wrap gap-4 mb-4">
             {categories.map(cat => {
-              const categoryCount = resourceData.getResourcesByCategory(cat.id).length;
+              const categoryCount = (cat.id === 'all' ? allResources : allResources.filter(r => r.category === cat.id)).length;
               return (
                 <button
                   key={cat.id}
@@ -235,6 +269,12 @@ const Dashboard = ({ userData, dirHandle }) => {
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-5 fade-in">
+          {loading && (
+            <div className="col-span-full text-center text-gray-400">Loading resources…</div>
+          )}
+          {error && (
+            <div className="col-span-full text-center text-red-400">{error}</div>
+          )}
           {filteredContent.map(item => (
             <div
               key={item.id}

@@ -73,122 +73,84 @@ const generateTitle = (filename) => {
   return title;
 };
 
-// Actual files from the resources directory
-const actualResources = [
-  // PDF files
-  '1. Principles of Electromechanical Energy Conversion Author Universidad Tsinghua.pdf',
-  '3rd year IPS_2025_26_Odd.pdf',
-  'data-structures-and-algorithms.pdf',
-  'DBMS Assignment 1.pdf',
-  'DBMS ASSIGNMENT 2.pdf',
-  'DBMS ASSIGNMENT 3.pdf',
-  'dev-example.pdf',
-  'dummy-10KB.pdf',
-  'Dummy-PDF-2Pages.pdf',
-  'Dummy-PDF.pdf',
-  'engineering-economics-and-financial-management-chan-duong-nguyen.pdf',
-  'protected.pdf',
-  'python-programming-guide.pdf',
-  'python-programming-guide.pdf.txt',
-  'sample-10-page-pdf-a4-size.pdf',
-  'sample-2.pdf',
-  'sample-5-page-pdf-a4-size.pdf',
-  'sample-pdf-a4-size.pdf',
-  'sample-pdf-legal-size.pdf',
-  'sample-pdf-letter-size.pdf',
-  'sample-report.pdf',
-  'sample-text-only-pdf-a4-size.pdf',
-  'SamplePDF-19kb-Text-Formatting-1Page.pdf',
-  'SamplePDF-28kb-Text-Formatting-3Pages.pdf',
-  
-  // Doc files
-  '1-MB-DOC.doc',
-  'Free_Test_Data_100KB_DOC.doc',
-  'Free_Test_Data_500KB_DOC.doc',
-  'JavaScript_Tutorial_Beginners.docx',
-  'Mid Term Theory Exam 5th sem.docx',
-  'OS Programs.txt',
-  'python-docs.zip',
-  'react-docs.zip',
-  'SQL_CheatSheet.docx',
-  'University_Placement_Portal_Presentation.pptx',
-  'WebNova.pptx',
-  '📘 SQL Queries.docx',
-  
-  // Wiki files
-  'wiki-cs-demo.zip',
-  'wiki-math-demo.zip',
-  'Engineering - Wikipedia.html',
-  'Wikipedia, the free encyclopedia.html',
-];
+// Load resources from generated manifest
+async function loadManifest() {
+  const resp = await fetch('/resources/_manifest.json', { cache: 'no-cache' })
+  if (!resp.ok) throw new Error('Failed to load resources manifest')
+  return resp.json()
+}
 
-const generateResourceData = () => {
-  return actualResources.map((filename, index) => {
-    const category = getFileCategory(filename);
-  const lower = filename.toLowerCase();
-  const categoryPath = category === 'wiki' ? 'wiki' : 
-            lower.endsWith('.pdf') ? 'pdf' : 'docs';
-    
+function sizeFromBytes(bytes, ext) {
+  if (!bytes || isNaN(bytes)) return estimateFileSize(ext ? `x.${ext}` : 'file')
+  const kb = bytes / 1024
+  if (kb < 1024) return `${Math.max(1, Math.round(kb))} KB`
+  const mb = kb / 1024
+  if (mb < 1024) return `${mb.toFixed(1)} MB`
+  const gb = mb / 1024
+  return `${gb.toFixed(2)} GB`
+}
+
+function mapManifestToResources(manifest) {
+  return manifest.files.map((f, index) => {
+    const filename = f.filename
+    const category = f.category || getFileCategory(filename)
+    const url = f.url
+    const folder = f.folder
+    const lower = filename.toLowerCase()
+    const isPdf = lower.endsWith('.pdf')
+    const categoryPath = folder || (category === 'wiki' ? 'wiki' : isPdf ? 'pdf' : 'docs')
     return {
       id: `${category}_${index}_${filename.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`,
-      category: category,
+      category,
       title: generateTitle(filename),
       type: getFileType(filename),
-      size: estimateFileSize(filename),
+      size: f.bytes ? sizeFromBytes(f.bytes, f.ext) : estimateFileSize(filename),
       description: `${generateTitle(filename)} - Available for offline access.`,
-      preview: `/resources/${categoryPath}/${encodeURIComponent(filename)}`,
-      url: `/resources/${categoryPath}/${encodeURIComponent(filename)}`,
-      filename: filename,
-    };
-  });
-};
+      preview: url,
+      url: url,
+      filename,
+      folder: categoryPath,
+      ext: f.ext,
+    }
+  })
+}
 
 export default {
-  suggestionsFor: (onboarding) => {
-    const allResources = generateResourceData();
-    
-    // If no onboarding data, return all resources
-    if (!onboarding || !onboarding.interests) {
-      return allResources;
-    }
-    
-    // Filter based on user interests
-    const interests = onboarding.interests.map(i => i.toLowerCase());
+  // Returns Promise<array>
+  suggestionsFor: async (onboarding) => {
+    const manifest = await loadManifest()
+    const allResources = mapManifestToResources(manifest)
+    if (!onboarding || !onboarding.interests) return allResources
+    const interests = onboarding.interests.map(i => i.toLowerCase())
     const filtered = allResources.filter(resource => {
-      const resourceText = `${resource.title} ${resource.type} ${resource.description}`.toLowerCase();
-      return interests.some(interest => resourceText.includes(interest));
-    });
-    
-    // If filtered results are too few, include some general resources
+      const resourceText = `${resource.title} ${resource.type} ${resource.description}`.toLowerCase()
+      return interests.some(interest => resourceText.includes(interest))
+    })
     if (filtered.length < 6) {
-      const general = allResources.filter(r => !filtered.find(f => f.id === r.id)).slice(0, 10 - filtered.length);
-      return [...filtered, ...general];
+      const general = allResources.filter(r => !filtered.find(f => f.id === r.id)).slice(0, 10 - filtered.length)
+      return [...filtered, ...general]
     }
-    
-    return filtered;
+    return filtered
   },
-  
-  // Get all resources without filtering
-  getAllResources: () => {
-    return generateResourceData();
+  getAllResources: async () => {
+    const manifest = await loadManifest()
+    return mapManifestToResources(manifest)
   },
-  
-  // Get resources by category
-  getResourcesByCategory: (category) => {
-    const allResources = generateResourceData();
-    if (category === 'all') return allResources;
-    return allResources.filter(resource => resource.category === category);
+  getResourcesByCategory: async (category) => {
+    const manifest = await loadManifest()
+    const allResources = mapManifestToResources(manifest)
+    if (category === 'all') return allResources
+    return allResources.filter(r => r.category === category)
   },
-  
-  // Search resources
-  searchResources: (query) => {
-    const allResources = generateResourceData();
-    const searchTerm = query.toLowerCase();
+  searchResources: async (query) => {
+    const manifest = await loadManifest()
+    const allResources = mapManifestToResources(manifest)
+    const searchTerm = query.toLowerCase()
     return allResources.filter(resource => 
       resource.title.toLowerCase().includes(searchTerm) ||
       resource.type.toLowerCase().includes(searchTerm) ||
       resource.description.toLowerCase().includes(searchTerm) ||
       resource.filename.toLowerCase().includes(searchTerm)
-    );
+    )
   }
-};
+}

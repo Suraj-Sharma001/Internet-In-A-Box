@@ -1,0 +1,554 @@
+{
+  "updatedAt": "2025-10-17T04:00:55.168Z",
+  "files": [
+    {
+      "relPath": "resources/docs/1-MB-DOC.doc",
+      "url": "/resources/docs/1-MB-DOC.doc",
+      "filename": "1-MB-DOC.doc",
+      "folder": "docs",
+      "ext": "doc",
+      "bytes": 1048576,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/Free_Test_Data_100KB_DOC.doc",
+      "url": "/resources/docs/Free_Test_Data_100KB_DOC.doc",
+      "filename": "Free_Test_Data_100KB_DOC.doc",
+      "folder": "docs",
+      "ext": "doc",
+      "bytes": 102912,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/Free_Test_Data_500KB_DOC.doc",
+      "url": "/resources/docs/Free_Test_Data_500KB_DOC.doc",
+      "filename": "Free_Test_Data_500KB_DOC.doc",
+      "folder": "docs",
+      "ext": "doc",
+      "bytes": 512512,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/JavaScript_Tutorial_Beginners.docx",
+      "url": "/resources/docs/JavaScript_Tutorial_Beginners.docx",
+      "filename": "JavaScript_Tutorial_Beginners.docx",
+      "folder": "docs",
+      "ext": "docx",
+      "bytes": 28176,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/Mid Term Theory Exam 5th sem.docx",
+      "url": "/resources/docs/Mid%20Term%20Theory%20Exam%205th%20sem.docx",
+      "filename": "Mid Term Theory Exam 5th sem.docx",
+      "folder": "docs",
+      "ext": "docx",
+      "bytes": 13880,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/OS Programs.txt",
+      "url": "/resources/docs/OS%20Programs.txt",
+      "filename": "OS Programs.txt",
+      "folder": "docs",
+      "ext": "txt",
+      "bytes": 13758,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/python-docs.zip",
+      "url": "/resources/docs/python-docs.zip",
+      "filename": "python-docs.zip",
+      "folder": "docs",
+      "ext": "zip",
+      "bytes": 52,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/react-docs.zip",
+      "url": "/resources/docs/react-docs.zip",
+      "filename": "react-docs.zip",
+      "folder": "docs",
+      "ext": "zip",
+      "bytes": 51,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/SQL_CheatSheet.docx",
+      "url": "/resources/docs/SQL_CheatSheet.docx",
+      "filename": "SQL_CheatSheet.docx",
+      "folder": "docs",
+      "ext": "docx",
+      "bytes": 28492,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/University_Placement_Portal_Presentation.pptx",
+      "url": "/resources/docs/University_Placement_Portal_Presentation.pptx",
+      "filename": "University_Placement_Portal_Presentation.pptx",
+      "folder": "docs",
+      "ext": "pptx",
+      "bytes": 493998,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/WebNova.pptx",
+      "url": "/resources/docs/WebNova.pptx",
+      "filename": "WebNova.pptx",
+      "folder": "docs",
+      "ext": "pptx",
+      "bytes": 404387,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/docs/📘 SQL Queries.docx",
+      "url": "/resources/docs/%F0%9F%93%98%20SQL%20Queries.docx",
+      "filename": "📘 SQL Queries.docx",
+      "folder": "docs",
+      "ext": "docx",
+      "bytes": 19801,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/pdf/1. Principles of Electromechanical Energy Conversion Author Universidad Tsinghua.pdf",
+      "url": "/resources/pdf/1.%20Principles%20of%20Electromechanical%20Energy%20Conversion%20Author%20Universidad%20Tsinghua.pdf",
+      "filename": "1. Principles of Electromechanical Energy Conversion Author Universidad Tsinghua.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 167692,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/11.-Alice-s-Adventures-in-Wonderland-Author-Lewis-Carroll.pdf",
+      "url": "/resources/pdf/11.-Alice-s-Adventures-in-Wonderland-Author-Lewis-Carroll.pdf",
+      "filename": "11.-Alice-s-Adventures-in-Wonderland-Author-Lewis-Carroll.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 442842,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/32.-The-Little-Prince-Author-Antoine-de-Saint-Exup-ry.pdf",
+      "url": "/resources/pdf/32.-The-Little-Prince-Author-Antoine-de-Saint-Exup-ry.pdf",
+      "filename": "32.-The-Little-Prince-Author-Antoine-de-Saint-Exup-ry.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 1340959,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/3rd year IPS_2025_26_Odd.pdf",
+      "url": "/resources/pdf/3rd%20year%20IPS_2025_26_Odd.pdf",
+      "filename": "3rd year IPS_2025_26_Odd.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 446903,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/data-structures-and-algorithms.pdf",
+      "url": "/resources/pdf/data-structures-and-algorithms.pdf",
+      "filename": "data-structures-and-algorithms.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 110,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/DBMS Assignment 1.pdf",
+      "url": "/resources/pdf/DBMS%20Assignment%201.pdf",
+      "filename": "DBMS Assignment 1.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 159328,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/DBMS ASSIGNMENT 2.pdf",
+      "url": "/resources/pdf/DBMS%20ASSIGNMENT%202.pdf",
+      "filename": "DBMS ASSIGNMENT 2.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 151485,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/DBMS ASSIGNMENT 3.pdf",
+      "url": "/resources/pdf/DBMS%20ASSIGNMENT%203.pdf",
+      "filename": "DBMS ASSIGNMENT 3.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 208920,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/dev-example.pdf",
+      "url": "/resources/pdf/dev-example.pdf",
+      "filename": "dev-example.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 707486,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/dummy-10KB.pdf",
+      "url": "/resources/pdf/dummy-10KB.pdf",
+      "filename": "dummy-10KB.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 10240,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/Dummy-PDF-2Pages.pdf",
+      "url": "/resources/pdf/Dummy-PDF-2Pages.pdf",
+      "filename": "Dummy-PDF-2Pages.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 17395,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/Dummy-PDF.pdf",
+      "url": "/resources/pdf/Dummy-PDF.pdf",
+      "filename": "Dummy-PDF.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 15966,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/engineering-economics-and-financial-management-chan-duong-nguyen.pdf",
+      "url": "/resources/pdf/engineering-economics-and-financial-management-chan-duong-nguyen.pdf",
+      "filename": "engineering-economics-and-financial-management-chan-duong-nguyen.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 1099171,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/oedipus-the-king-sophocles.pdf",
+      "url": "/resources/pdf/oedipus-the-king-sophocles.pdf",
+      "filename": "oedipus-the-king-sophocles.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 268314,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/protected.pdf",
+      "url": "/resources/pdf/protected.pdf",
+      "filename": "protected.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 4870,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/python-programming-guide.pdf",
+      "url": "/resources/pdf/python-programming-guide.pdf",
+      "filename": "python-programming-guide.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 106,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/python-programming-guide.pdf.txt",
+      "url": "/resources/pdf/python-programming-guide.pdf.txt",
+      "filename": "python-programming-guide.pdf.txt",
+      "folder": "pdf",
+      "ext": "txt",
+      "bytes": 132,
+      "category": "docs"
+    },
+    {
+      "relPath": "resources/pdf/sample-10-page-pdf-a4-size.pdf",
+      "url": "/resources/pdf/sample-10-page-pdf-a4-size.pdf",
+      "filename": "sample-10-page-pdf-a4-size.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 2120158,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/sample-2.pdf",
+      "url": "/resources/pdf/sample-2.pdf",
+      "filename": "sample-2.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 22698,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/sample-5-page-pdf-a4-size.pdf",
+      "url": "/resources/pdf/sample-5-page-pdf-a4-size.pdf",
+      "filename": "sample-5-page-pdf-a4-size.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 123179,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/sample-pdf-a4-size.pdf",
+      "url": "/resources/pdf/sample-pdf-a4-size.pdf",
+      "filename": "sample-pdf-a4-size.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 154871,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/sample-pdf-legal-size.pdf",
+      "url": "/resources/pdf/sample-pdf-legal-size.pdf",
+      "filename": "sample-pdf-legal-size.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 159498,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/sample-pdf-letter-size.pdf",
+      "url": "/resources/pdf/sample-pdf-letter-size.pdf",
+      "filename": "sample-pdf-letter-size.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 154711,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/sample-report.pdf",
+      "url": "/resources/pdf/sample-report.pdf",
+      "filename": "sample-report.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 2515221,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/sample-text-only-pdf-a4-size.pdf",
+      "url": "/resources/pdf/sample-text-only-pdf-a4-size.pdf",
+      "filename": "sample-text-only-pdf-a4-size.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 102559,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/SamplePDF-19kb-Text-Formatting-1Page.pdf",
+      "url": "/resources/pdf/SamplePDF-19kb-Text-Formatting-1Page.pdf",
+      "filename": "SamplePDF-19kb-Text-Formatting-1Page.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 18863,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/SamplePDF-28kb-Text-Formatting-3Pages.pdf",
+      "url": "/resources/pdf/SamplePDF-28kb-Text-Formatting-3Pages.pdf",
+      "filename": "SamplePDF-28kb-Text-Formatting-3Pages.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 28388,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/the-canterville-ghost-oscar-wilde.pdf",
+      "url": "/resources/pdf/the-canterville-ghost-oscar-wilde.pdf",
+      "filename": "the-canterville-ghost-oscar-wilde.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 209470,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/the-old-man-and-the-sea-ernest-hemingway.pdf",
+      "url": "/resources/pdf/the-old-man-and-the-sea-ernest-hemingway.pdf",
+      "filename": "the-old-man-and-the-sea-ernest-hemingway.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 376894,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/pdf/the-strange-case-of-doctor-jekyll-and-mr-hyde-robert-louis-stevenson.pdf",
+      "url": "/resources/pdf/the-strange-case-of-doctor-jekyll-and-mr-hyde-robert-louis-stevenson.pdf",
+      "filename": "the-strange-case-of-doctor-jekyll-and-mr-hyde-robert-louis-stevenson.pdf",
+      "folder": "pdf",
+      "ext": "pdf",
+      "bytes": 365759,
+      "category": "pdf"
+    },
+    {
+      "relPath": "resources/wiki/Calculus - Wikipedia.html",
+      "url": "/resources/wiki/Calculus%20-%20Wikipedia.html",
+      "filename": "Calculus - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 503548,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Classical mechanics - Wikipedia.html",
+      "url": "/resources/wiki/Classical%20mechanics%20-%20Wikipedia.html",
+      "filename": "Classical mechanics - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 360176,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Computer Arch - Search results - Wikipedia.html",
+      "url": "/resources/wiki/Computer%20Arch%20-%20Search%20results%20-%20Wikipedia.html",
+      "filename": "Computer Arch - Search results - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 84363,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Critical thinking - Wikipedia.html",
+      "url": "/resources/wiki/Critical%20thinking%20-%20Wikipedia.html",
+      "filename": "Critical thinking - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 379701,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Data science - Wikipedia.html",
+      "url": "/resources/wiki/Data%20science%20-%20Wikipedia.html",
+      "filename": "Data science - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 179771,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Democracy - Wikipedia.html",
+      "url": "/resources/wiki/Democracy%20-%20Wikipedia.html",
+      "filename": "Democracy - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 1039868,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Earth - Wikipedia.html",
+      "url": "/resources/wiki/Earth%20-%20Wikipedia.html",
+      "filename": "Earth - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 1036276,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Economics - Wikipedia.html",
+      "url": "/resources/wiki/Economics%20-%20Wikipedia.html",
+      "filename": "Economics - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 759318,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Engineering - Wikipedia.html",
+      "url": "/resources/wiki/Engineering%20-%20Wikipedia.html",
+      "filename": "Engineering - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 600841,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Linear algebra - Wikipedia.html",
+      "url": "/resources/wiki/Linear%20algebra%20-%20Wikipedia.html",
+      "filename": "Linear algebra - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 435545,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Organic chemistry - Wikipedia.html",
+      "url": "/resources/wiki/Organic%20chemistry%20-%20Wikipedia.html",
+      "filename": "Organic chemistry - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 272836,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Periodic table - Wikipedia.html",
+      "url": "/resources/wiki/Periodic%20table%20-%20Wikipedia.html",
+      "filename": "Periodic table - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 1355013,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Quantum mechanics - Wikipedia.html",
+      "url": "/resources/wiki/Quantum%20mechanics%20-%20Wikipedia.html",
+      "filename": "Quantum mechanics - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 674648,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Space exploration - Wikipedia.html",
+      "url": "/resources/wiki/Space%20exploration%20-%20Wikipedia.html",
+      "filename": "Space exploration - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 583648,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Study skills - Wikipedia.html",
+      "url": "/resources/wiki/Study%20skills%20-%20Wikipedia.html",
+      "filename": "Study skills - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 187463,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/wiki-cs-demo.zip",
+      "url": "/resources/wiki/wiki-cs-demo.zip",
+      "filename": "wiki-cs-demo.zip",
+      "folder": "wiki",
+      "ext": "zip",
+      "bytes": 56,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/wiki-math-demo.zip",
+      "url": "/resources/wiki/wiki-math-demo.zip",
+      "filename": "wiki-math-demo.zip",
+      "folder": "wiki",
+      "ext": "zip",
+      "bytes": 51,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/Wikipedia, the free encyclopedia.html",
+      "url": "/resources/wiki/Wikipedia%2C%20the%20free%20encyclopedia.html",
+      "filename": "Wikipedia, the free encyclopedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 238942,
+      "category": "wiki"
+    },
+    {
+      "relPath": "resources/wiki/World history (field) - Wikipedia.html",
+      "url": "/resources/wiki/World%20history%20(field)%20-%20Wikipedia.html",
+      "filename": "World history (field) - Wikipedia.html",
+      "folder": "wiki",
+      "ext": "html",
+      "bytes": 299091,
+      "category": "wiki"
+    }
+  ]
+}
